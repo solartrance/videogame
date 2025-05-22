@@ -7,16 +7,16 @@ class Program
     static RentalService rentalService = new RentalService();
 
     static void SeedGames() {
-        //rentalService.AddGame(new Game("G001", "The Witcher 3", "RPG", 2015, 5.99m));
-        //rentalService.AddGame(new Game("G002", "Cyberpunk 2077", "Action RPG", 2020, 7.99m));
-        //rentalService.AddGame(new Game("G003", "Minecraft", "Sandbox", 2011, 3.99M));
+        rentalService.AddGame(new Game("G001", "The Witcher 3", "RPG", 2015, 5.99m));
+        rentalService.AddGame(new Game("G002", "Cyberpunk 2077", "Action RPG", 2020, 7.99m));
+        rentalService.AddGame(new Game("G003", "Minecraft", "Sandbox", 2011, 3.99M));
     }
     static void SeedCustomers() {
-        //rentalService.AddCustomer(new Customer(1, "Cset Elek"));
-        //rentalService.AddCustomer(new Customer(2, "Hiszt Erika"));
-        //rentalService.AddCustomer(new Customer(3, "Cicam Ica"));
-        //rentalService.AddCustomer(new Customer(4, "Idét Lenke"));
-        //rentalService.AddCustomer(new Customer(5, "Kispál Inka"));
+        rentalService.AddCustomer(new Customer(1, "Cset Elek"));
+        rentalService.AddCustomer(new Customer(2, "Hiszt Erika"));
+        rentalService.AddCustomer(new Customer(3, "Cicam Ica"));
+        rentalService.AddCustomer(new Customer(4, "Idét Lenke"));
+        rentalService.AddCustomer(new Customer(5, "kispál inka"));
     }
 
     static void DisplayInfo(IEnumerable<object> lista) {
@@ -26,14 +26,57 @@ class Program
         }
     }
 
+    static void AddGame()
+    {
+        Console.Write("Játék ID: ");
+        string id = Console.ReadLine();
+        Console.Write("Cím: ");
+        string title = Console.ReadLine();
+        Console.Write("Műfaj: ");
+        string genre = Console.ReadLine();
+        Console.Write("Kiadási év: ");
+        int year = int.Parse(Console.ReadLine());
+        Console.Write("Ár/nap: ");
+        decimal price = decimal.Parse(Console.ReadLine());
+
+        rentalService.AddGame(new Game(id, title, genre, year, price));
+        Console.WriteLine("Játék hozzáadva.");
+    }
+
+    static void RemoveGame()
+    {
+        Console.Write("Törlendő játék ID: ");
+        string id = Console.ReadLine();
+        rentalService.RemoveGame(id);
+        Console.WriteLine("Ha elérhető volt, törölve lett.");
+    }
+
+
+
     static void RentGame()
     {
+        Console.Write("Felhasználó neve: ");
+        string name = Console.ReadLine();
+        Console.Write("Játék ID: ");
+        string id = Console.ReadLine();
 
+        if (rentalService.RentGame(name, id))
+            Console.WriteLine("Sikeres kölcsönzés.");
+        else
+            Console.WriteLine("Kölcsönzés sikertelen (játék lehet, hogy nem elérhető vagy nem létezik).");
     }
 
     static void ReturnGame()
     {
+        Console.Write("Felhasználó neve: ");
+        string name = Console.ReadLine();
+        Console.Write("Játék ID: ");
+        string id = Console.ReadLine();
 
+        if (rentalService.ReturnGame(name, id))
+            Console.WriteLine("Sikeres visszavétel.");
+        else
+            Console.WriteLine("Visszavétel sikertelen.");
     }
 
     static void DisplayRentalCosts()
@@ -86,34 +129,31 @@ class Program
             switch (choice)
             {
                 case "1":
-                   
-                    break; 
+                    DisplayInfo(rentalService.ListAllGames());
+                    break;
                 case "2":
-                    
-                    break; 
+                    AddGame();
+                    break;
                 case "3":
-                    
+                    DisplayInfo(rentalService.ListAvailableGames());
                     break;
                 case "4":
-               
+                    DisplayInfo(rentalService.ListCustomers());
                     break;
                 case "5":
-                  
+                    AddCustomer();
                     break;
                 case "6":
-                   
+                    RentGame();
                     break;
                 case "7":
-                   
+                    ReturnGame();
                     break;
                 case "8":
-                    
+                    DisplayRentalCosts();
                     break;
                 case "9":
-                   
-                    return;
-                case "\n":
-                    break;
+                    SaveData();
                 default:
                     Console.WriteLine("Érvénytelen választás. Próbáld újra!");
                     break;
